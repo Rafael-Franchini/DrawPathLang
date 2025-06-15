@@ -1,49 +1,51 @@
-import turtle
+from lexer import Lexer, TokenType
+from comandos import IniciarEm, LinhaPara, CurvaPara, CirculoEm
 
-def interpretar(comandos):
-    turtle.title("DrawPathLang")
-    turtle.speed(1)
+def parser(texto):
+    lexer = Lexer(texto)
+    tokens = lexer.tokenizar()
+    comandos = []
+    pos = 0
 
-    for linha in comandos:
-        linha = linha.strip()
-        if not linha or linha.startswith("#"):
-            continue
+    def eat(tipo_esperado):
+        nonlocal pos
+        if pos >= len(tokens):
+            raise Exception("Fim inesperado dos tokens")
+        token = tokens[pos]
+        if token.tipo != tipo_esperado:
+            raise Exception(f"Esperado {tipo_esperado}, mas encontrou {token.tipo} ({token.valor})")
+        pos += 1
+        return token
 
-        if linha.startswith("iniciar_em"):
-            x, y = extrair_coordenadas(linha)
-            turtle.penup()
-            turtle.goto(x, y)
-            turtle.pendown()
+    while pos < len(tokens) and tokens[pos].tipo != TokenType.EOF:
+        token = tokens[pos]
 
-        elif linha.startswith("linha_para"):
-            x, y = extrair_coordenadas(linha)
-            turtle.goto(x, y)
+        if token.tipo == TokenType.IDENT:
+            nome = token.valor
+            pos += 1  # consumiu o IDENT
 
-        elif linha.startswith("curva_para"):
-            x, y, r = extrair_coordenadas_raio(linha)
-            turtle.goto(x, y)
-            turtle.circle(r, 90)
+            eat(TokenType.LPAREN)
+            x = eat(TokenType.NUM).valor
+            eat(TokenType.VIRGULA)
+            y = eat(TokenType.NUM).valor
+            eat(TokenType.RPAREN)
 
-        elif linha.startswith("circulo_em"):
-            x, y, r = extrair_coordenadas_raio(linha)
-            turtle.penup()
-            turtle.goto(x, y - r)
-            turtle.pendown()
-            turtle.circle(r)
+            if nome == "iniciar_em":
+                comandos.append(IniciarEm(x, y))
+            elif nome == "linha_para":
+                comandos.append(LinhaPara(x, y))
+            elif nome == "curva_para":
+                eat(TokenType.RAIO)
+                r = eat(TokenType.NUM).valor
+                comandos.append(CurvaPara(x, y, r))
+            elif nome == "circulo_em":
+                eat(TokenType.RAIO)
+                r = eat(TokenType.NUM).valor
+                comandos.append(CirculoEm(x, y, r))
+            else:
+                raise Exception(f"Comando desconhecido: {nome}")
 
-    try:
-        turtle.done()
-    except turtle.Terminator:
-        pass
+        else:
+            raise Exception(f"Token inesperado: {token}")
 
-def extrair_coordenadas(texto):
-    coords = texto.split("(")[1].split(")")[0]
-    x_str, y_str = coords.split(",")
-    return float(x_str.strip()), float(y_str.strip())
-
-def extrair_coordenadas_raio(texto):
-    partes = texto.split("raio")
-    coords = partes[0].split("(")[1].split(")")[0]
-    x_str, y_str = coords.split(",")
-    raio = float(partes[1].strip())
-    return float(x_str.strip()), float(y_str.strip()), raio
+    return comandos

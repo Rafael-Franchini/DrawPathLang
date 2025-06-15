@@ -14,7 +14,6 @@ class Token:
     def __init__(self, tipo, valor):
         self.tipo = tipo
         self.valor = valor
-
     def __repr__(self):
         return f"Token({self.tipo}, {self.valor})"
 
@@ -26,15 +25,21 @@ class Lexer:
 
     def tokenizar(self):
         texto = self.texto
-        padrao = re.compile(r'\s*(iniciar_em|linha_para|curva_para|circulo_em|\d+|\(|\)|,|raio)', re.IGNORECASE)
+        padrao = re.compile(r'\s*(#.*|iniciar_em|linha_para|curva_para|circulo_em|-?\d+|\(|\)|,|raio)', re.IGNORECASE)
         while self.pos < len(texto):
             match = padrao.match(texto, self.pos)
             if not match:
                 raise Exception(f"Erro léxico na posição {self.pos}")
             token_str = match.group(1)
+
+            # Ignora comentários
+            if token_str.startswith("#"):
+                self.pos = match.end()
+                continue
+
             if token_str.lower() in ["iniciar_em", "linha_para", "curva_para", "circulo_em"]:
                 self.tokens.append(Token(TokenType.IDENT, token_str.lower()))
-            elif token_str.isdigit():
+            elif re.match(r'-?\d+', token_str):
                 self.tokens.append(Token(TokenType.NUM, int(token_str)))
             elif token_str == "(":
                 self.tokens.append(Token(TokenType.LPAREN, token_str))
@@ -46,6 +51,8 @@ class Lexer:
                 self.tokens.append(Token(TokenType.RAIO, token_str.lower()))
             else:
                 raise Exception(f"Token desconhecido: {token_str}")
+
             self.pos = match.end()
+
         self.tokens.append(Token(TokenType.EOF, None))
         return self.tokens
