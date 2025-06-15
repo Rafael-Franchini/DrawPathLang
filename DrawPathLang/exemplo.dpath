@@ -1,0 +1,7 @@
+iniciar_em (0, 0)
+linha_para (50, 0)
+linha_para (50, 50)
+linha_para (0, 50)
+linha_para (0, 0)
+circulo_em (25, 25) raio 20
+
