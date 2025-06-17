@@ -1,3 +1,4 @@
+# eixo(x,y)
 # Base da casa (retângulo)
 iniciar_em (10, 10)
 linha_para (60, 10)
@@ -21,17 +22,17 @@ linha_para (30, 10)
 circulo_em (20, 30) raio 3
 
 # Sol (círculo grande)
-circulo_em (80, 60) raio 8
+circulo_em (80, 100) raio 8
 
 # Raios do sol
-iniciar_em (80, 68)
-linha_para (80, 75)
-iniciar_em (88, 60)
-linha_para (95, 60)
-iniciar_em (80, 52)
-linha_para (80, 45)
-iniciar_em (72, 60)
-linha_para (65, 60)
+iniciar_em (80, 108)
+linha_para (80, 115)
+iniciar_em (88, 100)
+linha_para (95, 100)
+iniciar_em (80, 92)
+linha_para (80, 85)
+iniciar_em (72, 100)
+linha_para (65, 100)
 
 # Tronco (retângulo)
 iniciar_em (70, 10)
@@ -40,7 +41,7 @@ linha_para (75, 25)
 linha_para (70, 25)
 linha_para (70, 10)
 
-# Copa da árvore (círculo grande)
+# topo da árvore (círculo)
 circulo_em (72, 35) raio 10
 
 # Base do carro
@@ -57,13 +58,13 @@ circulo_em (90, -5) raio 5
 circulo_em (120, -5) raio 5
 
 # Nuvem 1
-circulo_em (20, 70) raio 8
-circulo_em (30, 75) raio 10
-circulo_em (40, 70) raio 8
-circulo_em (30, 65) raio 9
+circulo_em (20, 90) raio 8
+circulo_em (30, 95) raio 10
+circulo_em (40, 90) raio 8
+circulo_em (30, 85) raio 9
 
 # Nuvem 2
-circulo_em (70, 80) raio 7
-circulo_em (80, 85) raio 9
 circulo_em (90, 80) raio 7
-circulo_em (80, 75) raio 8
+circulo_em (100, 85) raio 9
+circulo_em (110, 80) raio 7
+circulo_em (100, 75) raio 8

@@ -8,7 +8,7 @@ class TokenType(Enum):
     RPAREN = auto()
     VIRGULA = auto()
     RAIO = auto()
-    EOF = auto()
+    EOF = auto()  # Fim do arquivo
 
 class Token:
     def __init__(self, tipo, valor):
@@ -23,9 +23,10 @@ class Lexer:
         self.pos = 0
         self.tokens = []
 
+#Função principal que lê o texto e gera os tokens
     def tokenizar(self):
         texto = self.texto
-        padrao = re.compile(r'\s*(#.*|iniciar_em|linha_para|curva_para|circulo_em|-?\d+|\(|\)|,|raio)', re.IGNORECASE)
+        padrao = re.compile(r'\s*(#.*|iniciar_em|linha_para|curva_para|circulo_em|-?\d+|\(|\)|,|raio)', re.IGNORECASE) #Expressão regular para encontrar partes válidas do código:
         while self.pos < len(texto):
             match = padrao.match(texto, self.pos)
             if not match:
@@ -37,6 +38,7 @@ class Lexer:
                 self.pos = match.end()
                 continue
 
+            # Verifica qual é o tipo do token encontrado e adiciona à lista
             if token_str.lower() in ["iniciar_em", "linha_para", "curva_para", "circulo_em"]:
                 self.tokens.append(Token(TokenType.IDENT, token_str.lower()))
             elif re.match(r'-?\d+', token_str):
@@ -52,7 +54,7 @@ class Lexer:
             else:
                 raise Exception(f"Token desconhecido: {token_str}")
 
-            self.pos = match.end()
-
+            self.pos = match.end()   # Avança a posição no texto
+        # fim de arquivo
         self.tokens.append(Token(TokenType.EOF, None))
         return self.tokens
