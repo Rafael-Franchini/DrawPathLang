@@ -98,9 +98,9 @@ DrawPathLang/
 
 ## 👨‍💻 Autores
 
-Rafael Franchini  
-Otavio Fadini  
-Danilo Muller  
+- [@rafaelfranchini](https://github.com/Rafael-Franchini)
+- [@otaviofadini](https://github.com/Otavio-Fadini)
+- [@danilomuller](https://github.com/MDanilo98)
 
 Estudantes de Engenharia da Computação  
 Disciplina: Teoria da Computação e Compiladores – 2025  
